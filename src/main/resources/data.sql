@@ -1,0 +1,1 @@
+INSERT INTO sectors VALUES (1, 'First value', NULL, 0);
