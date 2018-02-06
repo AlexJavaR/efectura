@@ -17,6 +17,9 @@ public class User {
     private Integer id;
 
     @NotNull
+    private String sessionId;
+
+    @NotNull
     private String name;
 
     public User() {

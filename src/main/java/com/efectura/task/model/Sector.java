@@ -18,6 +18,9 @@ public class Sector {
     @NotNull
     private String name;
 
+    @Column(name = "parent_id")
+    private Integer parentId;
+
     @OneToMany
     @JoinColumn(name = "parent_id")
     @OrderColumn
