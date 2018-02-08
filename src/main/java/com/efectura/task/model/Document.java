@@ -11,18 +11,24 @@ import java.util.List;
 @Data
 public class Document {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    @SequenceGenerator(name = "my_sequence", initialValue = 1000, allocationSize = 10)
     private Integer id;
 
     @NotNull
     private boolean termAgree;
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.ALL})
     private User user;
 
-    @OneToMany
-    private List<Sector> sectors;
+    private String sectorIds;
 
     public Document() {
+    }
+
+    public Document(boolean termAgree, User user, String sectorIds) {
+        this.termAgree = termAgree;
+        this.user = user;
+        this.sectorIds = sectorIds;
     }
 }

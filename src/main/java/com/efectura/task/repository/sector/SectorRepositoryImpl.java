@@ -29,7 +29,7 @@ public class SectorRepositoryImpl implements SectorRepository{
     }
 
     public List<Sector> findAll() {
-        return (List<Sector>) crudRepository.findAll();
+        return crudRepository.findAll();
     }
 
     @Override

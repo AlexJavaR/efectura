@@ -17,7 +17,7 @@ $(document).ready(function () {
 
 function addOption(json, level) {
     var indent = "";
-    for (var k = 0; k < level*4; k++) {
+    for (var k = 0; k < level * 4; k++) {
         indent += "&nbsp;";
     }
     var selectBox = document.getElementById("sector-box");
@@ -32,11 +32,81 @@ function addOption(json, level) {
             level--;
         }
     }
+    $.ajax({
+        type: "GET",
+        contentType: "application/json",
+        url: "/document",
+        dataType: 'json',
+        cache: false,
+        timeout: 600000,
+        success: function (data) {
+            console.log(JSON.stringify(data));
+            if (data !== undefined) {
+                getExistUser(data);
+                console.log("complete fill form");
+            }
+        },
+        error: function (e) {
+            console.log("ERROR : ", e);
+        }
+    });
+}
+
+function getExistUser(data) {
+    document.getElementById("input-username");
+    $("#input-username").val(data.userName);
+    console.log(data.userName);
+    var agree = document.getElementById("input-agree");
+    agree.checked = data.termAgree;
+
+    var sectors = data.sectorIds;
+    console.log("data.sectorIds - " + data.sectorIds);
+    console.log($("div.id_sector select"));
+    $("div.id_sector select").val(sectors);
 }
 
 $(document).ready(function () {
 
     $("#sector-form").submit(function (event) {
-
+        event.preventDefault();
+        createObjectForSubmit();
     });
 });
+
+function createObjectForSubmit() {
+    var jsonObject = {};
+    var agree = document.getElementById("input-agree");
+    if (agree.checked) {
+        jsonObject["termAgree"] = true;
+    } else jsonObject["termAgree"] = false;
+    jsonObject["userName"] = $("#input-username").val();
+
+    var sectors = [];
+
+    $("#sector-box").find("option:selected").each(function () {
+        sectors.push($(this).val());
+    });
+
+    jsonObject["sectorIds"] = sectors;
+
+    $("#btn-save").prop("disabled", true);
+
+    $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        url: "/document",
+        data: JSON.stringify(jsonObject),
+        dataType: 'json',
+        cache: false,
+        timeout: 600000,
+        success: function (data) {
+            getExistUser(data);
+            console.log("SUCCESS : ", data);
+            $("#bth-save").prop("disabled", false);
+        },
+        error: function (e) {
+            console.log("ERROR : ", e);
+            $("#bth-save").prop("disabled", false);
+        }
+    });
+}

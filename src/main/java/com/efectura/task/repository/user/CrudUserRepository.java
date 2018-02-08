@@ -1,8 +1,8 @@
 package com.efectura.task.repository.user;
 
 import com.efectura.task.model.User;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CrudUserRepository extends CrudRepository<User, Integer> {
+public interface CrudUserRepository extends JpaRepository<User, Integer> {
     User getBySessionId(String sessionId);
 }

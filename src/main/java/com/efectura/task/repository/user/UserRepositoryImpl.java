@@ -37,6 +37,6 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public List<User> findAll() {
-        return (List<User>) crudRepository.findAll();
+        return crudRepository.findAll();
     }
 }

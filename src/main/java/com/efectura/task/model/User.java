@@ -24,4 +24,9 @@ public class User {
 
     public User() {
     }
+
+    public User(String sessionId, String name) {
+        this.sessionId = sessionId;
+        this.name = name;
+    }
 }
