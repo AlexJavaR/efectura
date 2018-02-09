@@ -32,6 +32,10 @@ function addOption(json, level) {
             level--;
         }
     }
+    getExistUser();
+}
+
+function getExistUser() {
     $.ajax({
         type: "GET",
         contentType: "application/json",
@@ -42,7 +46,16 @@ function addOption(json, level) {
         success: function (data) {
             console.log(JSON.stringify(data));
             if (data !== undefined) {
-                getExistUser(data);
+                document.getElementById("input-username");
+                $("#input-username").val(data.userName);
+                console.log(data.userName);
+                var agree = document.getElementById("input-agree");
+                agree.checked = data.termAgree;
+
+                var sectors = data.sectorIds;
+                console.log("data.sectorIds - " + data.sectorIds);
+                console.log($("div.id_sector select"));
+                $("div.id_sector select").val(sectors);
                 console.log("complete fill form");
             }
         },
@@ -50,19 +63,6 @@ function addOption(json, level) {
             console.log("ERROR : ", e);
         }
     });
-}
-
-function getExistUser(data) {
-    document.getElementById("input-username");
-    $("#input-username").val(data.userName);
-    console.log(data.userName);
-    var agree = document.getElementById("input-agree");
-    agree.checked = data.termAgree;
-
-    var sectors = data.sectorIds;
-    console.log("data.sectorIds - " + data.sectorIds);
-    console.log($("div.id_sector select"));
-    $("div.id_sector select").val(sectors);
 }
 
 $(document).ready(function () {
@@ -100,7 +100,8 @@ function createObjectForSubmit() {
         cache: false,
         timeout: 600000,
         success: function (data) {
-            getExistUser(data);
+            location.reload();
+            getExistUser();
             console.log("SUCCESS : ", data);
             $("#bth-save").prop("disabled", false);
         },

@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Controller
-@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+//@RequestMapping(produces = "APPLICATION_JSON")
 public class MainRestController {
 
     private final UserService userService;
@@ -52,10 +52,11 @@ public class MainRestController {
         return new ResponseEntity<>(sectorService.findAllByParentId(null), HttpStatus.OK);
     }
 
-    @GetMapping("/document")
-    public ResponseEntity<DocumentDTO> getExistDocument(HttpServletRequest request) {
+    @GetMapping(value = "/document")
+    public ResponseEntity<DocumentDTO> getExistDocument(HttpServletResponse response, HttpServletRequest request) {
         String jsessionid = request.getParameter("JSESSIONID");
         String sessionId = request.getSession().getId();
+        response.setContentType("application/json;charset=UTF-8");
         DocumentDTO documentDTO = documentService.getBySession(sessionId);
         if (documentDTO != null)
             return new ResponseEntity<>(documentDTO, HttpStatus.OK);
@@ -64,11 +65,11 @@ public class MainRestController {
     }
 
     @PostMapping("/document")
-    public ResponseEntity<DocumentDTO> createNewDocument(HttpServletRequest request,
+    public ResponseEntity<DocumentDTO> createDocument(HttpServletRequest request,
                                                  @RequestBody DocumentDTO documentDTO) {
         String sessionId = request.getSession().getId();
         DocumentDTO document = documentService.save(documentDTO, sessionId);
 
-        return new ResponseEntity<>(document, HttpStatus.OK);
+        return new ResponseEntity<>(document, HttpStatus.CREATED);
     }
 }
